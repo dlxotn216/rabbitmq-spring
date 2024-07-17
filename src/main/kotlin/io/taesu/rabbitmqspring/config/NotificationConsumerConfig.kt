@@ -28,6 +28,7 @@ class NotificationConsumerConfig(private val properties: NotificationConsumerPro
         // "sms": Queue("app.notification.sms")
         val queues = properties.instances.map {
             it.routingKey to Queue(it.topic, true, false, false).apply {
+                it.dlRoutingKey ?: return@apply
                 arguments["x-dead-letter-exchange"] = properties.exchange   // DLX
                 arguments["x-dead-letter-routing-key"] = it.dlRoutingKey    // DLQ
             }
@@ -65,20 +66,5 @@ class NotificationConsumerConfig(private val properties: NotificationConsumerPro
             *queueMap.values.toTypedArray(),
             *(queueBindings + deadLetterQueueBindings).toTypedArray()
         )
-    }
-
-    @Bean
-    fun rabbitListenerContainerFactory(
-        configurer: SimpleRabbitListenerContainerFactoryConfigurer,
-        connectionFactory: ConnectionFactory,
-        objectMapper: ObjectMapper,
-    ): SimpleRabbitListenerContainerFactory {
-        return SimpleRabbitListenerContainerFactory().apply {
-            configurer.configure(this, connectionFactory)
-            this.setMessageConverter(Jackson2JsonMessageConverter(objectMapper))
-            this.setAfterReceivePostProcessors(GlobalConsumerMessagePostProcessor())
-            this.setAcknowledgeMode(AcknowledgeMode.MANUAL)
-            this.setPrefetchCount(1)
-        }
     }
 }
