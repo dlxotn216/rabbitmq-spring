@@ -1,0 +1,45 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: taesu
+    password: password
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
+
+app:
+  notification:
+    consumer:
+      exchange: app.notification
+      instances:
+        - routingKey: email
+          topic: app.notification.email
+          dlRoutingKey: email.dead
+          dlTopic: app.notification.email.dead
+        - routingKey: sms
+          topic: app.notification.sms
+          dlRoutingKey: sms.dead
+          dlTopic: app.notification.sms.dead
+        - routingKey: kakao
+          topic: app.notification.kakao
+          dlRoutingKey: kakao.dead
+          dlTopic: app.notification.kakao.dead
+        - routingKey: line
+          topic: app.notification.line
+          dlRoutingKey: line.dead
+          dlTopic: app.notification.line.dead
+      notification-email:
+        topic: ${app.notification.consumer.instances[0].topic}
+        dlTopic: ${app.notification.consumer.instances[0].dlTopic}
+      notification-sms:
+        topic: ${app.notification.consumer.instances[1].topic}
+        dlTopic: ${app.notification.consumer.instances[1].dlTopic}
+      notification-kakao:
+        topic: ${app.notification.consumer.instances[2].topic}
+        dlTopic: ${app.notification.consumer.instances[2].dlTopic}
+      notification-line:
+        topic: ${app.notification.consumer.instances[3].topic}
+        dlTopic: ${app.notification.consumer.instances[3].dlTopic}
+
