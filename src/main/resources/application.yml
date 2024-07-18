@@ -42,4 +42,15 @@ app:
       notification-line:
         topic: ${app.notification.consumer.instances[3].topic}
         dlTopic: ${app.notification.consumer.instances[3].dlTopic}
+  orders:
+    consumer:
+      exchange: app.orders
+      instances:
+        - routingKey: event
+          topic: app.orders.event
+          dlRoutingKey: event.dead
+          dlTopic: app.orders.event.dead
+      orders-event:
+        topic: ${app.orders.consumer.instances[0].topic}
+        dlTopic: ${app.orders.consumer.instances[0].dlTopic}
 
