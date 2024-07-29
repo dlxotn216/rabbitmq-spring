@@ -21,7 +21,7 @@ class OrdersConsumerConfig(private val properties: OrderConsumerProperties) {
     @Bean
     fun ordersDeclarables(): Declarables {
         val exchange = DirectExchange(properties.exchange, true, false)
-        val queues = properties.instances.map {
+        val queues = properties.instanceValues.map {
             it.routingKey to Queue(it.topic, true, false, false).apply {
                 it.dlRoutingKey ?: return@apply
                 arguments["x-dead-letter-exchange"] = properties.exchange   // DLX
@@ -29,21 +29,21 @@ class OrdersConsumerConfig(private val properties: OrderConsumerProperties) {
             }
         }
 
-        val dlQueues = properties.instances.mapNotNull {
+        val dlQueues = properties.instanceValues.mapNotNull {
             it.dlTopic ?: return@mapNotNull null
             it.dlRoutingKey ?: return@mapNotNull null
             it.dlRoutingKey to Queue(it.dlTopic, true, false, false)
         }
         val queueMap = (queues + dlQueues).toMap()
 
-        val queueBindings = properties.instances.mapNotNull {
+        val queueBindings = properties.instanceValues.mapNotNull {
             val queue = queueMap[it.routingKey] ?: return@mapNotNull null
             BindingBuilder.bind(queue)
                 .to(exchange)
                 .with(it.routingKey)
         }
 
-        val deadLetterQueueBindings = properties.instances.mapNotNull {
+        val deadLetterQueueBindings = properties.instanceValues.mapNotNull {
             val queue = queueMap[it.dlRoutingKey] ?: return@mapNotNull null
             BindingBuilder.bind(queue)
                 .to(exchange)

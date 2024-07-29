@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class NotificationConsumer {
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-email.topic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-email.topic}"])
     fun listen(
         message: Message,
         channel: Channel,
@@ -30,7 +30,7 @@ class NotificationConsumer {
         channel.basicAck(tag, false)
     }
 
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-sms.topic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-sms.topic}"])
     fun listen(
         message: Message,
         channel: Channel,
@@ -41,7 +41,7 @@ class NotificationConsumer {
         channel.basicAck(tag, false)
     }
 
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-kakao.topic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-kakao.topic}"])
     fun listen(
         message: Message,
         channel: Channel,
@@ -52,7 +52,7 @@ class NotificationConsumer {
         channel.basicAck(tag, false)
     }
 
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-line.topic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-line.topic}"])
     fun listen(
         message: Message,
         channel: Channel,

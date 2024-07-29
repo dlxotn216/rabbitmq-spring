@@ -13,5 +13,7 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding
 @ConfigurationProperties("app.orders.consumer")
 class OrderConsumerProperties @ConstructorBinding constructor(
     val exchange: String,
-    val instances: List<ConsumerProperty>,
-)
+    val instances: Map<String, ConsumerProperty>,
+) {
+    val instanceValues get() = instances.values
+}

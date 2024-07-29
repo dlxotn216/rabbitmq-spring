@@ -14,43 +14,32 @@ app:
     consumer:
       exchange: app.notification
       instances:
-        - routingKey: email
+        notification-email:
+          routingKey: email
           topic: app.notification.email
           dlRoutingKey: email.dead
           dlTopic: app.notification.email.dead
-        - routingKey: sms
+        notification-sms:
+          routingKey: sms
           topic: app.notification.sms
           dlRoutingKey: sms.dead
           dlTopic: app.notification.sms.dead
-        - routingKey: kakao
+        notification-kakao:
+          routingKey: kakao
           topic: app.notification.kakao
           dlRoutingKey: kakao.dead
           dlTopic: app.notification.kakao.dead
-        - routingKey: line
+        notification-line:
+          routingKey: line
           topic: app.notification.line
           dlRoutingKey: line.dead
           dlTopic: app.notification.line.dead
-      notification-email:
-        topic: ${app.notification.consumer.instances[0].topic}
-        dlTopic: ${app.notification.consumer.instances[0].dlTopic}
-      notification-sms:
-        topic: ${app.notification.consumer.instances[1].topic}
-        dlTopic: ${app.notification.consumer.instances[1].dlTopic}
-      notification-kakao:
-        topic: ${app.notification.consumer.instances[2].topic}
-        dlTopic: ${app.notification.consumer.instances[2].dlTopic}
-      notification-line:
-        topic: ${app.notification.consumer.instances[3].topic}
-        dlTopic: ${app.notification.consumer.instances[3].dlTopic}
   orders:
     consumer:
       exchange: app.orders
       instances:
-        - routingKey: event
+        orders-event:
+          routingKey: event
           topic: app.orders.event
           dlRoutingKey: event.dead
           dlTopic: app.orders.event.dead
-      orders-event:
-        topic: ${app.orders.consumer.instances[0].topic}
-        dlTopic: ${app.orders.consumer.instances[0].dlTopic}
-

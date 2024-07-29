@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
  * @version rabbitmq-spring
  * @since rabbitmq-spring
  */
-@RabbitListener(queues = ["\${app.orders.consumer.orders-event.topic}"])
+@RabbitListener(queues = ["\${app.orders.consumer.instances.orders-event.topic}"])
 @Component
 class OrderCommandConsumer {
     @RabbitHandler

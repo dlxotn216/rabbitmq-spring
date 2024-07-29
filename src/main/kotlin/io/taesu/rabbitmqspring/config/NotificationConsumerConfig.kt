@@ -26,7 +26,7 @@ class NotificationConsumerConfig(private val properties: NotificationConsumerPro
         // Create Queue
         // "emai": Queue("app.notification.email")
         // "sms": Queue("app.notification.sms")
-        val queues = properties.instances.map {
+        val queues = properties.instanceValues.map {
             it.routingKey to Queue(it.topic, true, false, false).apply {
                 it.dlRoutingKey ?: return@apply
                 arguments["x-dead-letter-exchange"] = properties.exchange   // DLX
@@ -37,7 +37,7 @@ class NotificationConsumerConfig(private val properties: NotificationConsumerPro
         // Create DeadLetter Queue
         // "emai.dead": Queue("app.notification.email.dead")
         // "sms.dead": Queue("app.notification.sms.dead")
-        val dlQueues = properties.instances.mapNotNull {
+        val dlQueues = properties.instanceValues.mapNotNull {
             it.dlTopic ?: return@mapNotNull null
             it.dlRoutingKey ?: return@mapNotNull null
             it.dlRoutingKey to Queue(it.dlTopic, true, false, false)
@@ -45,7 +45,7 @@ class NotificationConsumerConfig(private val properties: NotificationConsumerPro
         val queueMap = (queues + dlQueues).toMap()
 
         // Create Queue Binding
-        val queueBindings = properties.instances.mapNotNull {
+        val queueBindings = properties.instanceValues.mapNotNull {
             val queue = queueMap[it.routingKey] ?: return@mapNotNull null
             BindingBuilder.bind(queue)
                 .to(exchange)
@@ -53,7 +53,7 @@ class NotificationConsumerConfig(private val properties: NotificationConsumerPro
         }
 
         // Create DeadLetter Queue Binding
-        val deadLetterQueueBindings = properties.instances.mapNotNull {
+        val deadLetterQueueBindings = properties.instanceValues.mapNotNull {
             val queue = queueMap[it.dlRoutingKey] ?: return@mapNotNull null
             BindingBuilder.bind(queue)
                 .to(exchange)

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class NotificationDlConsumer {
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-email.dlTopic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-email.dlTopic}"])
     fun listenEmailDeadLetter(
         message: Message,
         channel: Channel,
@@ -28,7 +28,7 @@ class NotificationDlConsumer {
         channel.basicAck(tag, false)
     }
 
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-sms.dlTopic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-sms.dlTopic}"])
     fun listenSmsDeadLetter(
         message: Message,
         channel: Channel,
@@ -38,7 +38,7 @@ class NotificationDlConsumer {
         channel.basicAck(tag, false)
     }
 
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-kakao.dlTopic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-kakao.dlTopic}"])
     fun listenKakaoDeadLetter(
         message: Message,
         channel: Channel,
@@ -48,7 +48,7 @@ class NotificationDlConsumer {
         channel.basicAck(tag, false)
     }
 
-    @RabbitListener(queues = ["\${app.notification.consumer.notification-line.dlTopic}"])
+    @RabbitListener(queues = ["\${app.notification.consumer.instances.notification-line.dlTopic}"])
     fun listen(
         message: Message,
         channel: Channel,
