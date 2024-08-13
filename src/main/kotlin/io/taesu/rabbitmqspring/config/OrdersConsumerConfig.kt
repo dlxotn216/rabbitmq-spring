@@ -62,11 +62,12 @@ class OrdersConsumerConfig(private val properties: OrderConsumerProperties) {
         configurer: SimpleRabbitListenerContainerFactoryConfigurer,
         connectionFactory: ConnectionFactory,
         objectMapper: ObjectMapper,
+        globalConsumerMessagePostProcessor: GlobalConsumerMessagePostProcessor,
     ): SimpleRabbitListenerContainerFactory {
         return SimpleRabbitListenerContainerFactory().apply {
             configurer.configure(this, connectionFactory)
             this.setMessageConverter(Jackson2JsonMessageConverter(objectMapper))
-            this.setAfterReceivePostProcessors(GlobalConsumerMessagePostProcessor())
+            this.setAfterReceivePostProcessors(globalConsumerMessagePostProcessor)
             this.setAcknowledgeMode(AcknowledgeMode.MANUAL)
             this.setPrefetchCount(1)
         }
